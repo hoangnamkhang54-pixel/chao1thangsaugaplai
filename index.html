@@ -12,82 +12,115 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: radial-gradient(circle, #ff4d4d, #b30000);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a0000; /* Màu nền tối để pháo hoa nổi bật */
+            background: radial-gradient(circle, #4d0000, #000000);
+            font-family: 'Segoe UI', Arial, sans-serif;
             color: white;
             overflow: hidden;
             text-align: center;
+            /* CHỐNG BÔI ĐEN CHỮ */
+            user-select: none; 
+            -webkit-user-select: none;
+            cursor: pointer;
         }
 
         .container {
             z-index: 10;
+            padding: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
         }
 
         h1 {
-            font-size: 3rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            color: #ffcc00;
+            text-shadow: 0 0 20px #ff3300;
+            margin: 0;
+            text-transform: uppercase;
         }
 
         p {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            margin: 15px 0;
+            letter-spacing: 1px;
         }
 
         .teky-text {
-            color: #ffcc00;
-            font-weight: bold;
+            background: linear-gradient(90deg, #00ffcc, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 2rem;
         }
 
-        .firework {
+        .firework-particle {
             position: absolute;
-            width: 5px;
-            height: 5px;
-            background: gold;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            box-shadow: 0 0 10px 2px gold;
-            animation: explode 1s ease-out forwards;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(20); opacity: 0; }
+            pointer-events: none; /* Không cản trở cú click */
         }
     </style>
 </head>
 <body onclick="createFirework(event)">
 
     <div class="container">
-        <h1>🧧 Chúc Mừng Năm Mới! 🧧</h1>
-        <p>Lớp lập trình <span class="teky-text">TEKY</span> tạm biệt cả lớp nhé!</p>
-        <p>Học xong buổi nay là <strong>Nghỉ Tết</strong> rồi! 🎉</p>
-        <p style="font-size: 1rem; opacity: 0.8;">(Click chuột vào màn hình để bắn pháo hoa nhé)</p>
+        <h1>🧧 CHÚC MỪNG NĂM MỚI 🧧</h1>
+        <p>Lớp lập trình <span class="teky-text">TEKY</span></p>
+        <p>Hẹn gặp lại sau Tết nhé! 🎉</p>
+        <div style="font-size: 0.9rem; color: #ffd700; margin-top: 10px; animation: flash 1.5s infinite;">
+            ✨ Click thật nhiều để bắn pháo hoa! ✨
+        </div>
     </div>
 
     <script>
         function createFirework(e) {
-            for (let i = 0; i < 10; i++) {
-                const firework = document.createElement('div');
-                firework.className = 'firework';
-                firework.style.left = e.clientX + 'px';
-                firework.style.top = e.clientY + 'px';
-                
-                // Random hướng bắn
-                const moveX = (Math.random() - 0.5) * 200;
-                const moveY = (Math.random() - 0.5) * 200;
-                firework.style.setProperty('--x', moveX + 'px');
-                firework.style.setProperty('--y', moveY + 'px');
-                
-                document.body.appendChild(firework);
-                
-                // Hiệu ứng di chuyển
-                firework.animate([
-                    { transform: 'translate(0, 0)' },
-                    { transform: `translate(${moveX}px, ${moveY}px)` }
-                ], { duration: 1000, easing: 'ease-out' });
+            const colors = ['#ff0044', '#00ffcc', '#ffcc00', '#ffffff', '#ff00ff', '#33ff00'];
+            const particleCount = 20; // Số lượng tia pháo mỗi lần click
 
-                setTimeout(() => firework.remove(), 1000);
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                
+                // Vị trí xuất phát tại điểm click
+                particle.style.left = e.clientX + 'px';
+                particle.style.top = e.clientY + 'px';
+                
+                // Chọn màu ngẫu nhiên
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                particle.style.boxShadow = `0 0 10px ${color}`;
+                
+                document.body.appendChild(particle);
+                
+                // Tạo hướng bắn ngẫu nhiên 360 độ
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 150 + 50;
+                const moveX = Math.cos(angle) * velocity;
+                const moveY = Math.sin(angle) * velocity;
+                
+                // Hiệu ứng bay ra và biến mất
+                particle.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${moveX}px, ${moveY}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 800 + Math.random() * 400,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                });
+
+                // Xóa particle sau khi diễn xong
+                setTimeout(() => particle.remove(), 1200);
             }
         }
+
+        // Tự động bắn pháo hoa lúc vừa load trang cho đẹp
+        window.onload = () => {
+            const mockEvent = { clientX: window.innerWidth/2, clientY: window.innerHeight/2 };
+            createFirework(mockEvent);
+        };
     </script>
 </body>
 </html>
