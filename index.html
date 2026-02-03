@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teky - Chào Tạm Biệt Nghỉ Tết</title>
+    <title>Teky - Chúc Mừng Năm Mới</title>
     <style>
         body {
             margin: 0;
@@ -12,115 +12,117 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #1a0000; /* Màu nền tối để pháo hoa nổi bật */
-            background: radial-gradient(circle, #4d0000, #000000);
-            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #1a0000;
+            background: radial-gradient(circle, #800000, #000000);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             overflow: hidden;
             text-align: center;
-            /* CHỐNG BÔI ĐEN CHỮ */
-            user-select: none; 
+            user-select: none;
             -webkit-user-select: none;
             cursor: pointer;
         }
 
         .container {
             z-index: 10;
-            padding: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+            padding: 30px;
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
         }
 
         h1 {
-            font-size: 3.5rem;
-            color: #ffcc00;
-            text-shadow: 0 0 20px #ff3300;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        p {
-            font-size: 1.6rem;
-            margin: 15px 0;
-            letter-spacing: 1px;
+            font-size: 3rem;
+            color: #ffd700;
+            text-shadow: 0 0 15px #ff0000;
+            margin-bottom: 5px;
         }
 
         .teky-text {
-            background: linear-gradient(90deg, #00ffcc, #00ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            font-size: 2rem;
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 2.2rem;
+            text-shadow: 0 0 10px #00ffcc;
         }
 
-        .firework-particle {
+        /* Hiệu ứng phong bao lì xì */
+        .lixi {
             position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            pointer-events: none; /* Không cản trở cú click */
+            font-size: 40px;
+            pointer-events: none;
+            z-index: 5;
+            transition: transform 0.1s;
+        }
+
+        .counter {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #ffcc00;
+        }
+
+        #count-number {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #ffffff;
         }
     </style>
 </head>
-<body onclick="createFirework(event)">
+<body onclick="handleClick(event)">
 
     <div class="container">
-        <h1>🧧 CHÚC MỪNG NĂM MỚI 🧧</h1>
-        <p>Lớp lập trình <span class="teky-text">TEKY</span></p>
-        <p>Hẹn gặp lại sau Tết nhé! 🎉</p>
-        <div style="font-size: 0.9rem; color: #ffd700; margin-top: 10px; animation: flash 1.5s infinite;">
-            ✨ Click thật nhiều để bắn pháo hoa! ✨
+        <h1>🧨 CHÚC MỪNG NĂM MỚI 🧨</h1>
+        <p>Lớp học lập trình <span class="teky-text">TEKY</span></p>
+        <p>Học nốt hôm nay là <strong>Nghỉ Tết</strong> rồi! 🎉</p>
+        
+        <div class="counter">
+            Bấm 20 cái để nhận quà: <span id="count-number">0</span>/20
         </div>
+        <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 15px;">(Click vào màn hình để lấy lì xì!)</p>
     </div>
 
     <script>
-        function createFirework(e) {
-            const colors = ['#ff0044', '#00ffcc', '#ffcc00', '#ffffff', '#ff00ff', '#33ff00'];
-            const particleCount = 20; // Số lượng tia pháo mỗi lần click
+        let clickCount = 0;
+        const target = 20;
+        const videoUrl = "https://www.youtube.com/watch?v=kYv_87j_k3Y"; // Link nhạc Tết
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'firework-particle';
-                
-                // Vị trí xuất phát tại điểm click
-                particle.style.left = e.clientX + 'px';
-                particle.style.top = e.clientY + 'px';
-                
-                // Chọn màu ngẫu nhiên
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.background = color;
-                particle.style.boxShadow = `0 0 10px ${color}`;
-                
-                document.body.appendChild(particle);
-                
-                // Tạo hướng bắn ngẫu nhiên 360 độ
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 150 + 50;
-                const moveX = Math.cos(angle) * velocity;
-                const moveY = Math.sin(angle) * velocity;
-                
-                // Hiệu ứng bay ra và biến mất
-                particle.animate([
-                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-                    { transform: `translate(${moveX}px, ${moveY}px) scale(0)`, opacity: 0 }
-                ], {
-                    duration: 800 + Math.random() * 400,
-                    easing: 'cubic-bezier(0, .9, .57, 1)'
-                });
+        function handleClick(e) {
+            clickCount++;
+            document.getElementById('count-number').innerText = clickCount;
 
-                // Xóa particle sau khi diễn xong
-                setTimeout(() => particle.remove(), 1200);
+            // 1. Tạo hiệu ứng lì xì bay lên
+            createLixi(e.clientX, e.clientY);
+
+            // 2. Kiểm tra nếu đủ 20 lần
+            if (clickCount >= target) {
+                // Hiển thị thông báo trước khi chuyển trang
+                document.querySelector('h1').innerText = "ĐANG MỞ QUÀ... 🎁";
+                setTimeout(() => {
+                    window.location.href = videoUrl;
+                }, 500);
             }
         }
 
-        // Tự động bắn pháo hoa lúc vừa load trang cho đẹp
-        window.onload = () => {
-            const mockEvent = { clientX: window.innerWidth/2, clientY: window.innerHeight/2 };
-            createFirework(mockEvent);
-        };
+        function createLixi(x, y) {
+            const lixi = document.createElement('div');
+            lixi.className = 'lixi';
+            lixi.innerText = '🧧';
+            lixi.style.left = x - 20 + 'px';
+            lixi.style.top = y - 20 + 'px';
+            
+            document.body.appendChild(lixi);
+
+            // Hiệu ứng lì xì bay lên và xoay
+            const animation = lixi.animate([
+                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                { transform: `translateY(-200px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: 1000,
+                easing: 'ease-out'
+            });
+
+            animation.onfinish = () => lixi.remove();
+        }
     </script>
 </body>
 </html>
